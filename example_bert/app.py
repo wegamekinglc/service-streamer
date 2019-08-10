@@ -43,6 +43,5 @@ streamer = ThreadedStreamer(model.predict, batch_size=256, max_latency=0.1)
 
 if __name__ == '__main__':
     # app.run(host="0.0.0.0", port=5000, debug=False)
-    
     from gevent.pywsgi import WSGIServer
     server = WSGIServer(("0.0.0.0", 5000), app).serve_forever()
