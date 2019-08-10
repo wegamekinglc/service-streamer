@@ -1,9 +1,7 @@
 from gevent import monkey; monkey.patch_all()
-
-
 from flask import Flask, request, jsonify
 from bert_serving.client import ConcurrentBertClient
-from service_streamer import ThreadedStreamer
+from service_streamer import RedisStreamer
 
 
 app = Flask(__name__)
@@ -33,12 +31,9 @@ def stream_predict():
 
 
 if __name__ == '__main__':
-    import multiprocessing as mp
-    mp.freeze_support()
-    mp.set_start_method("spawn", force=True)
     model = BertModel()
-    streamer = ThreadedStreamer(model.predict, batch_size=64, max_latency=0.1)
+    streamer = RedisStreamer()
     # app.run(host="0.0.0.0", port=5000, debug=False)
 
-    from gevent.pywsgi import WSGIServer
-    WSGIServer(("0.0.0.0", 5000), app).serve_forever()
+    # from gevent.pywsgi import WSGIServer
+    # WSGIServer(("0.0.0.0", 5000), app).serve_forever()
