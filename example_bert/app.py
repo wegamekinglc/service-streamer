@@ -12,13 +12,13 @@ app = Flask(__name__)
 
 
 class BertModel:
-        def __init__(self):
-            self.bc = ConcurrentBertClient(max_concurrency=128)
-    
-        def predict(self, batch):
-            batch_outputs = self.bc.encode(batch)
-            return batch_outputs
-    
+    def __init__(self):
+        self.bc = ConcurrentBertClient(max_concurrency=128)
+
+    def predict(self, batch):
+        batch_outputs = self.bc.encode(batch)
+        return batch_outputs
+
 
 model = BertModel()
 streamer = ThreadedStreamer(model.predict, batch_size=256, max_latency=0.1)
@@ -39,6 +39,6 @@ def stream_predict():
 
 
 if __name__ == '__main__':
-    # app.run(host="0.0.0.0", port=5000, debug=False)
-    from gevent.pywsgi import WSGIServer
-    server = WSGIServer(("0.0.0.0", 5000), app).serve_forever()
+    app.run(host="0.0.0.0", port=5000, debug=False, processes=4)
+    #from gevent.pywsgi import WSGIServer
+    # server = WSGIServer(("0.0.0.0", 5000), app).serve_forever()
