@@ -20,7 +20,7 @@ class BertModel:
     def predict(self, batch):
         # batch_outputs = self.bc.encode(batch)
         # return batch_outputs
-        return np.array([1.0, 0.0])
+        return np.array([[1.0, 0.0]])
 
 
 model = BertModel()
