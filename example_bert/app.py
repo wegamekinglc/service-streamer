@@ -4,6 +4,7 @@
 # mp.freeze_support()
 # mp.set_start_method("spawn", force=True)
 
+import numpy as np
 from flask import Flask, request, jsonify
 from bert_serving.client import ConcurrentBertClient
 from service_streamer import ThreadedStreamer
@@ -19,7 +20,7 @@ class BertModel:
     def predict(self, batch):
         # batch_outputs = self.bc.encode(batch)
         # return batch_outputs
-        return batch
+        return np.array([1.0, 0.0])
 
 
 model = BertModel()
