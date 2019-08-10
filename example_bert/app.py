@@ -1,4 +1,4 @@
-# from gevent import monkey; monkey.patch_all()
+from gevent import monkey; monkey.patch_all()
 import multiprocessing as mp
 mp.freeze_support()
 mp.set_start_method("spawn", force=True)
