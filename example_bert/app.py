@@ -29,10 +29,12 @@ def stream_predict():
     outputs = streamer.predict(inputs)
     return jsonify(list(outputs[0].astype(float)))
 
+model = BertModel()
+streamer = RedisStreamer()
 
 if __name__ == '__main__':
-    model = BertModel()
-    streamer = RedisStreamer()
+    pass
+    
     # app.run(host="0.0.0.0", port=5000, debug=False)
 
     # from gevent.pywsgi import WSGIServer
