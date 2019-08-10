@@ -1,6 +1,5 @@
 from gevent import monkey; monkey.patch_all()
 from gevent.pywsgi import WSGIServer
-from multiprocessing import Process
 from flask import Flask, request, jsonify
 from bert_serving.client import ConcurrentBertClient
 from service_streamer import ThreadedStreamer
@@ -32,13 +31,6 @@ def stream_predict():
     inputs = request.form.getlist("s")
     outputs = streamer.predict(inputs)
     return jsonify(list(outputs[0].astype(float)))
-    
-server = WSGIServer(("0.0.0.0", 5000), app)
-server.start()
-
-def serve_forever():
-    server.start_accepting()
-    server._stop_event.wait()
 
 
 if __name__ == '__main__':
@@ -49,7 +41,4 @@ if __name__ == '__main__':
     streamer = ThreadedStreamer(model.predict, batch_size=256, max_latency=0.1)
     
     # app.run(host="0.0.0.0", port=5000, debug=False)
-
-    for i in range(4):
-        p = Process(target=serve_forever)
-        p.start()
+    server = WSGIServer(("0.0.0.0", 5000), app).serve_forever()
