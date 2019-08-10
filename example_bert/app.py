@@ -41,6 +41,6 @@ def stream_predict():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=False)
-    #from gevent.pywsgi import WSGIServer
-    # server = WSGIServer(("0.0.0.0", 5000), app).serve_forever()
+    # app.run(host="0.0.0.0", port=5000, debug=False)
+    from gevent.pywsgi import WSGIServer
+    server = WSGIServer(("0.0.0.0", 5000), app).serve_forever()
