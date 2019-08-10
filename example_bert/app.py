@@ -3,11 +3,6 @@ from flask import Flask, request, jsonify
 from bert_serving.client import ConcurrentBertClient
 from service_streamer import ThreadedStreamer
 
-app = Flask(__name__)
-model = None
-streamer = None
-
-
 class BertModel:
     def __init__(self):
         self.bc = ConcurrentBertClient(max_concurrency=128)
@@ -30,11 +25,12 @@ def stream_predict():
     outputs = streamer.predict(inputs)
     return jsonify(list(outputs[0].astype(float)))
 
+mp.freeze_support()
+mp.set_start_method("spawn", force=True)
+app = Flask(__name__)
+model = BertModel()
+streamer = ThreadedStreamer(model.predict, batch_size=64, max_latency=0.1)
+
 
 if __name__ == '__main__':
-    mp.freeze_support()
-    mp.set_start_method("spawn", force=True)
-    model = BertModel()
-    streamer = ThreadedStreamer(model.predict, batch_size=64, max_latency=0.1)
-
     app.run(port=5000, debug=False)
