@@ -1,4 +1,3 @@
-import multiprocessing as mp
 import numpy as np
 from flask import Flask, request, jsonify
 from bert_serving.client import ConcurrentBertClient
@@ -33,7 +32,7 @@ def stream_predict():
     outputs = streamer.predict(inputs)
     return jsonify(list(outputs[0].astype(float)))
 
-
+import multiprocessing as mp
 mp.freeze_support()
 mp.set_start_method("spawn", force=True)
 
