@@ -1,10 +1,8 @@
 from gevent import monkey; monkey.patch_all()
 
-
-def post_fork(server, worker):
-    from service_streamer import RedisStreamer
-    import app
-    app.streamer = RedisStreamer()
+from service_streamer import RedisStreamer
+import app
+app.streamer = RedisStreamer()
 
 bind = '0.0.0.0:5000'
 workers = 4
