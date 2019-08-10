@@ -1,4 +1,4 @@
-from gevent import monkey; monkey.patch_all()
+import multiprocessing as mp
 import numpy as np
 from flask import Flask, request, jsonify
 from bert_serving.client import ConcurrentBertClient
@@ -11,13 +11,13 @@ streamer = None
 
 class BertModel:
     def __init__(self):
-        # self.bc = ConcurrentBertClient(max_concurrency=128)
-        pass
+        self.bc = ConcurrentBertClient(max_concurrency=128)
+        # pass
 
     def predict(self, batch):
-        # batch_outputs = self.bc.encode(batch)
-        # return batch_outputs
-        return np.array([[1.0, 0.0]])
+        batch_outputs = self.bc.encode(batch)
+        return batch_outputs
+        #return np.array([[1.0, 0.0]])
 
 
 @app.route("/naive", methods=["POST"])
@@ -33,8 +33,7 @@ def stream_predict():
     outputs = streamer.predict(inputs)
     return jsonify(list(outputs[0].astype(float)))
 
-    
-import multiprocessing as mp
+
 mp.freeze_support()
 mp.set_start_method("spawn", force=True)
 
@@ -43,8 +42,7 @@ streamer = ThreadedStreamer(model.predict, batch_size=256, max_latency=0.1)
 
 
 if __name__ == '__main__':
-    # app.run(host="0.0.0.0", port=5000, debug=False)
-    
-
-    from gevent.pywsgi import WSGIServer
-    server = WSGIServer(("0.0.0.0", 5000), app).serve_forever()
+    app.run(host="0.0.0.0", port=5000, debug=False)
+    # from gevent import monkey; monkey.patch_all()
+    # from gevent.pywsgi import WSGIServer
+    # server = WSGIServer(("0.0.0.0", 5000), app).serve_forever()
