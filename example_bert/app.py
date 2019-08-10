@@ -32,7 +32,7 @@ def stream_predict():
     inputs = request.form.getlist("s")
     outputs = streamer.predict(inputs)
     return jsonify(list(outputs[0].astype(float)))
-    from multiprocessing import cpu_count, Process
+    
 server = WSGIServer(("0.0.0.0", 5000), app)
 server.start()
 
