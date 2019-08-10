@@ -31,6 +31,8 @@ def stream_predict():
     outputs = streamer.predict(inputs)
     return jsonify(list(outputs[0].astype(float)))
 
+model = BertModel()
+
 
 if __name__ == '__main__':
     mp.freeze_support()
