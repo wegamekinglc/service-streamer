@@ -30,7 +30,6 @@ def stream_predict():
     return jsonify(list(outputs[0].astype(float)))
 
 model = BertModel()
-streamer = RedisStreamer()
 
 if __name__ == '__main__':
     pass
