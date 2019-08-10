@@ -33,16 +33,18 @@ def stream_predict():
     outputs = streamer.predict(inputs)
     return jsonify(list(outputs[0].astype(float)))
 
+    
+import multiprocessing as mp
+mp.freeze_support()
+mp.set_start_method("spawn", force=True)
+
+model = BertModel()
+streamer = ThreadedStreamer(model.predict, batch_size=256, max_latency=0.1)
+
 
 if __name__ == '__main__':
     # app.run(host="0.0.0.0", port=5000, debug=False)
-    import multiprocessing as mp
-    mp.freeze_support()
-    mp.set_start_method("spawn", force=True)
-
-    model = BertModel()
-    streamer = ThreadedStreamer(model.predict, batch_size=256, max_latency=0.1)
-
+    
 
     from gevent.pywsgi import WSGIServer
     server = WSGIServer(("0.0.0.0", 5000), app).serve_forever()
