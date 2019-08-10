@@ -1,8 +1,8 @@
-from gevent import monkey; monkey.patch_all()
-import multiprocessing as mp
+# from gevent import monkey; monkey.patch_all()
+# import multiprocessing as mp
 
-mp.freeze_support()
-mp.set_start_method("spawn", force=True)
+# mp.freeze_support()
+# mp.set_start_method("spawn", force=True)
 
 from flask import Flask, request, jsonify
 from bert_serving.client import ConcurrentBertClient
